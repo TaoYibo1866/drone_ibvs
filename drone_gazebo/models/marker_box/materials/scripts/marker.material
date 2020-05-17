@@ -1,0 +1,30 @@
+material ibvs/marker
+{
+  receive_shadows off
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture marker.png
+        filtering anistropic
+        max_anisotropy 16
+      }
+    }
+  }
+}
+
+material ibvs/box
+{
+  receive_shadows off
+  technique
+  {
+    pass ambient
+    {
+      ambient 0 0 1
+      diffuse 0 0 1
+      specular 0.1 0.1 0.1 1 1
+    }
+  }
+}

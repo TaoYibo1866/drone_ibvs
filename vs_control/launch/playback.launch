@@ -1,0 +1,16 @@
+<launch>
+    <arg name="mav_name" default="firefly"/>
+    <arg name="gimbal_camera_name" default="pan_tilt_camera" />
+    <arg name="video_path" default="$(find vs_control)/testset/test.mp4"/>
+    <group ns="$(arg mav_name)">
+        <node name="playback" pkg="vs_control" type="playback_node.py" args="$(arg gimbal_camera_name) $(arg video_path)" output="screen"/>
+        <node name="vs_front_end" pkg="vs_control" type="vs_front_end_node.py" args="$(arg gimbal_camera_name)" output="screen"/>
+        <node name="cv_view" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/vs_front_end/image_output">
+            <param name="autosize" type="bool" value="true"/>
+        </node>
+        <node name="ibvs_controller" pkg="vs_control" type="ibvs_controller_node.py" args="$(arg gimbal_camera_name)" output="screen">
+            <rosparam command="load" file="$(find vs_control)/config/camera_intrinsic.yaml" />
+            <rosparam command="load" file="$(find vs_control)/config/ibvs_controller.yaml" />
+        </node>
+    </group>
+</launch>

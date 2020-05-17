@@ -1,0 +1,25 @@
+<launch>
+  <arg name="mav_name" default="firefly"/>
+  <arg name="gimbal_camera_name" default="pan_tilt_camera"/>
+  <arg name="world_name" default="logo_box"/>
+
+  <include file="$(find drone_gazebo)/launch/world.launch">
+    <arg name="world_name" value="$(arg world_name)" />
+  </include>
+
+  <group ns="$(arg mav_name)">
+    <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+      <arg name="model" value="$(find drone_description)/urdf/mav_with_simple_pan_tilt_camera_fixed.gazebo" />
+    </include>
+    <include file="$(find drone_gazebo)/launch/pan_tilt_camera_control.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+      <arg name="gimbal_camera_name" value="$(arg gimbal_camera_name)" />
+    </include>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera/image_raw"/>
+    <node name="joint1_initial_position" pkg="rostopic" type="rostopic" args="pub -r 1 /$(arg mav_name)/$(arg gimbal_camera_name)/joint1_position_controller/command std_msgs/Float64 0.0" output="screen"/>
+    <node name="joint2_initial_position" pkg="rostopic" type="rostopic" args="pub -r 1 /$(arg mav_name)/$(arg gimbal_camera_name)/joint2_position_controller/command std_msgs/Float64 0.0" output="screen"/>
+  </group>
+</launch>
