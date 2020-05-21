@@ -4,7 +4,7 @@ from dynamic_reconfigure.server import Server
 from drone_control.cfg import VelocityControllerConfig
 from nav_msgs.msg import Odometry
 from mav_msgs.msg import RollPitchYawrateThrust
-from drone_control.msg import VelocityYawrate
+from drone_comm.msg import VelocityYawrate
 from tf.transformations import euler_from_quaternion, quaternion_from_euler, quaternion_inverse, quaternion_multiply
 from quaternion import transform_by_quaternion
 from numpy import cos

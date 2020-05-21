@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/tao/Desktop/catkin_ws/devel/include/**",
+                "/opt/ros/kinetic/include/**",
+                "/home/tao/Desktop/catkin_ws/src/mav_comm/mav_msgs/include/**",
+                "/home/tao/Desktop/catkin_ws/src/mav_comm/planning_msgs/include/**",
+                "/home/tao/Desktop/catkin_ws/src/rotors_simulator/rotors_control/include/**",
+                "/home/tao/Desktop/catkin_ws/src/rotors_simulator/rotors_gazebo_plugins/include/**",
+                "/home/tao/Desktop/catkin_ws/src/rotors_simulator/rotors_joy_interface/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
