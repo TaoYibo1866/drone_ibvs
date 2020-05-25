@@ -1,4 +1,4 @@
-# Drone Simulatior
+# Drone Simulator
 ## Abstract
 + This is a drone and gimbal camera simulation project based on ethz-asl/rotors_simulator.  
 + Add gimbal dynamic and drone velocity controller to the origin simulator.  
