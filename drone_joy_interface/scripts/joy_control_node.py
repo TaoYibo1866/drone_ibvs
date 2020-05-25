@@ -3,20 +3,16 @@
 import rospy
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Vector3Stamped
-from drone_comm.msg import VelocityYawrate
+from drone_control.msg import VelocityYawrate
 
 class JoyControl:
     def __init__(self):
-        rospy.init_node("joy_control")
         self.node_name = rospy.get_name()
         self.pitch_d = 0.0
         self.roll_d = 0.0
         rospy.Subscriber("joy", Joy, self.joy_callback, queue_size=1)
         self.velocity_yawrate_pub = rospy.Publisher("velocity_controller/command", VelocityYawrate, queue_size=1)
         self.gimbal_attitude_pub = rospy.Publisher("gimbal_controller/command", Vector3Stamped, queue_size=1)
-        return
-    def spin(self):
-        rospy.spin()
         return
     def joy_callback(self, joy):
         joy_axes = joy.axes
@@ -39,5 +35,6 @@ class JoyControl:
         return
 
 if __name__ =="__main__":
+    rospy.init_node("joy_control")
     joy_control = JoyControl()
-    joy_control.spin()
+    rospy.spin()

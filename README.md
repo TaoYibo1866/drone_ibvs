@@ -1,8 +1,8 @@
-# Drone Simulation
+# Drone Simulatior
 ## Abstract
 + This is a drone and gimbal camera simulation project based on ethz-asl/rotors_simulator.  
 + Add gimbal dynamic and drone velocity controller to the origin simulator.  
-+ An image based position controller is implemented as bonus.
++ An image based position controller is implemented in TaoYibo1866/drone_visual_servo.
 + A drone velocity and gimbal position control joystick-interface is implemented.
 ## Install
 __(tested on ROS Kinetic + Gazebo7.0)__
@@ -11,5 +11,5 @@ __(tested on ROS Kinetic + Gazebo7.0)__
 sudo apt-get install ros-kinetic-joint-state-controller  
 sudo apt-get install ros-kinetic-joint-state-publisher
 ## Usage
-+ roslaunch drone_mission_gazebo mav_and_gimbal_joy_control.launch
-+ roslaunch drone_mission_gazebo mav_ibvs_joy_control.launch
++ roslaunch drone_gazebo mav_and_gimbal_joy_control.launch
++ roslaunch drone_visual_servo mav_ibvs_joy_console.launch

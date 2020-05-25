@@ -4,7 +4,7 @@ from dynamic_reconfigure.server import Server
 from drone_control.cfg import VelocityControllerConfig
 from nav_msgs.msg import Odometry
 from mav_msgs.msg import RollPitchYawrateThrust
-from drone_comm.msg import VelocityYawrate
+from drone_control.msg import VelocityYawrate
 from tf.transformations import euler_from_quaternion, quaternion_from_euler, quaternion_inverse, quaternion_multiply
 from quaternion import transform_by_quaternion
 from numpy import cos
@@ -14,7 +14,6 @@ from threading import Lock
 
 class VelocityController:
     def __init__(self):
-        rospy.init_node('velocity_controller')
         self.node_name = rospy.get_name()
         self.G = rospy.get_param("{}/G".format(self.node_name))
         Kp_x = rospy.get_param("{}/Kp_x".format(self.node_name))
@@ -35,9 +34,6 @@ class VelocityController:
         rospy.Subscriber('{}/command'.format(self.node_name),VelocityYawrate, self.command_callback)
         self.roll_pitch_yawrate_thrust_pub = rospy.Publisher('command/roll_pitch_yawrate_thrust', RollPitchYawrateThrust, queue_size=1)
         self.velocity_yawrate_pub = rospy.Publisher('{}/state'.format(self.node_name), VelocityYawrate, queue_size=1)
-    def spin(self):
-        rospy.spin()
-        return
     def reconfigure_callback(self, config, level):
         if self.first_reconfigure_call:
             self.first_reconfigure_call = False
@@ -102,5 +98,6 @@ class VelocityController:
         return
 
 if __name__ == '__main__':
+    rospy.init_node('velocity_controller')
     velocity_controller = VelocityController()
-    velocity_controller.spin()
+    rospy.spin()

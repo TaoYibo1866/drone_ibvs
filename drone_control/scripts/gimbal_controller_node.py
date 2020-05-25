@@ -10,7 +10,6 @@ from threading import Lock
 
 class GimbalController:
     def __init__(self, gimbal_camera_name):
-        rospy.init_node('gimbal_controller')
         self.node_name = rospy.get_name()
         self.pitch_mtx = Lock()
         self.roll_mtx = Lock()
@@ -26,8 +25,6 @@ class GimbalController:
         self.joint1_position_pub = rospy.Publisher('{}/joint1_position_controller/command'.format(gimbal_camera_name), Float64, queue_size=1)
         self.joint2_position_pub = rospy.Publisher('{}/joint2_position_controller/command'.format(gimbal_camera_name), Float64, queue_size=1)
         return
-    def spin(self):
-        rospy.spin()
     def joint1_state_callback(self, joint1_state):
         with self.pitch_mtx:
             self.pitch = joint1_state.process_value
@@ -58,5 +55,6 @@ class GimbalController:
         self.joint2_position_pub.publish(command[0])
 
 if __name__ == '__main__':
+    rospy.init_node('gimbal_controller')
     gimbal_controller = GimbalController(argv[1])
-    gimbal_controller.spin()
+    rospy.spin()
