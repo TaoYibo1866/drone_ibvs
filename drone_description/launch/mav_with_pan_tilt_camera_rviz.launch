@@ -3,9 +3,9 @@
   <arg name="gui" default="true" />
   <arg name="rvizconfig" default="$(find drone_description)/rviz/urdf.rviz" />
 
-  <arg name="mav_name" default="iris"/>
+  <arg name="mav_name" default="ardrone"/>
   <arg name="namespace" default="$(arg mav_name)"/>
-  <arg name="model" default="$(find drone_description)/urdf/mav_with_simple_pan_tilt_camera_fixed.gazebo"/>
+  <arg name="model" default="$(find drone_description)/urdf/mav_with_pan_tilt_camera_fixed.gazebo"/>
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="

@@ -1,9 +1,9 @@
 <launch>
-  <!-- only firefly is tuned -->
-  <arg name="mav_name" default="firefly"/>
+  <!-- only firefly and ardrone is tuned -->
+  <arg name="mav_name" default="ardrone"/>
   <!-- ${namespace}/gimbal_camera_name in .gazebo file -->
   <arg name="gimbal_camera_name" default="pan_tilt_camera"/>
-  <arg name="world_name" default="marker_box"/>
+  <arg name="world_name" default="logo_and_marker_box"/>
   <arg name="x" default="0.0"/>
   <arg name="y" default="0.0"/>
   <arg name="z" default="2.0"/>
@@ -22,7 +22,7 @@
   <group ns="$(arg mav_name)">
     <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find drone_description)/urdf/mav_with_simple_pan_tilt_camera.gazebo" />
+      <arg name="model" value="$(find drone_description)/urdf/mav_with_pan_tilt_camera.gazebo" />
       <arg name="x" value="$(arg x)"/>
       <arg name="y" value="$(arg y)"/>
       <arg name="z" value="$(arg z)"/>

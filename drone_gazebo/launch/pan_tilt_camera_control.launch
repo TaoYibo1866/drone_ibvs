@@ -12,13 +12,13 @@
   <rosparam param="$(arg gimbal_camera_name)/joint1_position_controller" subst_value="true">
     type: "effort_controllers/JointPositionController"
     joint: $(arg mav_name)/$(arg gimbal_camera_name)/gimbal_pitch_joint
-    pid: { p: 2.0, i: 0.01, d: 0.001 }
+    pid: { p: 0.5, i: 0.01, d: 0.01 }
   </rosparam>
 
   <rosparam param="$(arg gimbal_camera_name)/joint2_position_controller" subst_value="true">
     type: effort_controllers/JointPositionController
     joint: $(arg mav_name)/$(arg gimbal_camera_name)/gimbal_roll_joint
-    pid: { p: 0.2, i: 0.001, d: 0.0001 }
+    pid: { p: 0.15, i: 0.01, d: 0.001 }
   </rosparam>
 
   <!-- load the controllers -->

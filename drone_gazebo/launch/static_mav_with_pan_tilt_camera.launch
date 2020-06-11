@@ -10,7 +10,7 @@
   <group ns="$(arg mav_name)">
     <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find drone_description)/urdf/mav_with_simple_pan_tilt_camera_fixed.gazebo" />
+      <arg name="model" value="$(find drone_description)/urdf/mav_with_pan_tilt_camera_fixed.gazebo" />
     </include>
     <include file="$(find drone_gazebo)/launch/pan_tilt_camera_control.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
