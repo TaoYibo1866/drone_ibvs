@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find drone_description)/urdf/common.xacro" />
+  
+  <xacro:macro name="pan_tilt_camera_macro" params="namespace parent_link frame_rate
+      horizontal_fov image_width image_height image_format min_distance
+      max_distance noise_mean noise_stddev offset *origin">
+
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>${namespace}</robotNamespace>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        <legacyModeNS>true</legacyModeNS>
+      </plugin>
+    </gazebo>
+
+    <joint name="${namespace}/gimbal_base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}"/>
+      <child link="${namespace}/gimbal_base_link"/>
+    </joint>
+
+    <link name="${namespace}/gimbal_base_link">
+      <xacro:box_inertial_with_origin
+        x="0.02"
+        y="0.005"
+        z="${offset}"
+        mass="0.06">
+        <origin xyz="0.0 -0.05 -${offset / 2.0}" rpy="0 0 0"/>
+      </xacro:box_inertial_with_origin>
+      <visual>
+        <origin xyz="0.0 -0.05 -${offset / 2.0}" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.005 ${offset}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+    </link>
+
+    <joint name="${namespace}/gimbal_pitch_joint" type="revolute">
+      <origin xyz="0.0 -0.05 -${offset}" rpy="${pi} 0.0 0.0"/>
+      <parent link="${namespace}/gimbal_base_link"/>
+      <child link="${namespace}/gimbal_pitch_link"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit lower="${-pi/4}" upper="${pi/4}" effort="0.2" velocity="6.0"/>
+    </joint>
+
+    <link name="${namespace}/gimbal_pitch_link">
+      <xacro:box_inertial_with_origin
+        x="0.02"
+        y="0.04"
+        z="0.005"
+        mass="0.06">
+        <origin xyz="0 -0.02 0.0" rpy="0 0 0" />
+      </xacro:box_inertial_with_origin>
+      <visual>
+        <origin xyz="0 -0.02 0.0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.04 0.005"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+    </link>
+
+    <joint name="${namespace}/gimbal_roll_joint" type="revolute">
+      <origin xyz="0 -0.05 0.0" rpy="0.0 0.0 0.0"/>
+      <parent link="${namespace}/gimbal_pitch_link"/>
+      <child link="${namespace}/gimbal_roll_link"/>
+      <axis xyz="1.0 0.0 0.0"/>
+      <limit lower="${-pi/4}" upper="${pi/4}" effort="0.2" velocity="6.0"/>
+    </joint>
+
+    <link name="${namespace}/gimbal_roll_link">
+      <xacro:box_inertial_with_origin
+        x="0.03"
+        y="0.02"
+        z="0.005"
+        mass="0.06">
+        <origin xyz="-0.025 0 0" rpy="0 0 0" />
+      </xacro:box_inertial_with_origin>
+      <visual>
+        <origin xyz="-0.025 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.03 0.02 0.005"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+    </link>
+
+    <transmission name="${namespace}/pitch_tran">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${namespace}/gimbal_pitch_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${namespace}/gimbal_pitch_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${namespace}/roll_tran">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${namespace}/gimbal_roll_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${namespace}/gimbal_roll_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <gazebo reference="${namespace}/gimbal_base_link">
+      <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="${namespace}/gimbal_pitch_link">
+      <material>Gazebo/Green</material>
+    </gazebo>
+
+    <gazebo reference="${namespace}/gimbal_roll_link">
+      <material>Gazebo/Red</material>
+    </gazebo>
+    
+    <xacro:camera_with_inertial_macro
+      namespace="${namespace}"
+      parent_link="${namespace}/gimbal_roll_link"
+      camera_suffix="0"
+      frame_rate="${frame_rate}"
+      horizontal_fov="${horizontal_fov}"
+      image_width="${image_width}"
+      image_height="${image_height}"
+      image_format="${image_format}"
+      min_distance="${min_distance}"
+      max_distance="${max_distance}"
+      noise_mean="${noise_mean}"
+      noise_stddev="${noise_stddev}"
+      enable_visual="true">
+      <cylinder radius="0.01" length="0.005"/>
+      <xacro:cylinder_inertial_with_origin
+        radius="0.01"
+        length="0.005"
+        mass="0.12">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:cylinder_inertial_with_origin>
+      <origin xyz="0 0 0" rpy="${pi/2} ${-pi/2} 0" />
+    </xacro:camera_with_inertial_macro>
+  </xacro:macro>
+
+  <xacro:macro name="camera_with_inertial_macro"
+    params="namespace parent_link camera_suffix frame_rate
+      horizontal_fov image_width image_height image_format min_distance
+      max_distance noise_mean noise_stddev enable_visual *geometry *inertial *origin">
+    <link name="${namespace}/camera_${camera_suffix}_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <xacro:insert_block name="geometry" />
+        </geometry>
+      </collision>
+      <xacro:if value="${enable_visual}">
+        <visual>
+          <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+          <geometry>
+            <xacro:insert_block name="geometry" />
+          </geometry>
+          <material name="orange" />
+        </visual>
+      </xacro:if>
+      <xacro:insert_block name="inertial" />
+    </link>
+    <joint name="${namespace}/camera_${camera_suffix}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}" />
+      <child link="${namespace}/camera_${camera_suffix}_link" />
+    </joint>
+    <link name="${namespace}/camera_${camera_suffix}_optical_link" />
+    <joint name="${namespace}/camera_${camera_suffix}_optical_joint" type="fixed" >
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+      <parent link="${namespace}/camera_${camera_suffix}_link" />
+      <child link="${namespace}/camera_${camera_suffix}_optical_link" />
+    </joint>
+    <gazebo reference="${namespace}/camera_${camera_suffix}_link">
+      <material>Gazebo/Orange</material>
+      <sensor type="camera" name="${namespace}_camera_${camera_suffix}">
+        <update_rate>${frame_rate}</update_rate>
+        <camera name="head">
+          <horizontal_fov>${horizontal_fov}</horizontal_fov>
+          <image>
+            <width>${image_width}</width>
+            <height>${image_height}</height>
+            <format>${image_format}</format>
+          </image>
+          <clip>
+            <near>${min_distance}</near>
+            <far>${max_distance}</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <!-- Noise is sampled independently per pixel on each frame.
+                 That pixel's noise value is added to each of its color
+                 channels, which at that point lie in the range [0,1]. -->
+            <mean>${noise_mean}</mean>
+            <stddev>${noise_stddev}</stddev>
+          </noise>
+        </camera>
+        <plugin name="${namespace}_camera_${camera_suffix}_controller" filename="libgazebo_ros_camera.so">
+          <robotNamespace>${namespace}</robotNamespace>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>${frame_rate}</updateRate>
+          <cameraName>camera_${camera_suffix}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_${camera_suffix}_link</frameName>
+          <hackBaseline>0.0</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

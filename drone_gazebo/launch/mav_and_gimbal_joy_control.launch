@@ -45,7 +45,7 @@
       <rosparam command="load" file="$(find drone_control)/config/velocity_controller_$(arg mav_name).yaml" />
     </node>
     <node name="gimbal_controller" pkg="drone_control" type="gimbal_controller_node.py" args="$(arg gimbal_camera_name)" output="screen" />
-    <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera/image_raw"/>
+    <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera_0/image_raw"/>
     <node name="joy_node" pkg="joy" type="joy_node"/>
     <node name="joy_control" pkg="drone_joy_interface" type="joy_control_node.py" output="screen"/>
   </group>
