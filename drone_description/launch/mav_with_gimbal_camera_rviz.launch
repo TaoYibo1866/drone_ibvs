@@ -1,0 +1,29 @@
+<launch>
+
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find drone_description)/rviz/urdf.rviz" />
+
+  <arg name="mav_name" default="ardrone"/>
+  <arg name="gimbal_camera_name" default="tilt_camera"/>
+  <arg name="namespace" default="$(arg mav_name)"/>
+  <arg name="model" default="$(find drone_description)/urdf/fixed_mav_with_gimbal_camera.gazebo"/>
+
+  <!-- send the robot XML to param server -->
+  <param name="robot_description" command="
+    $(find xacro)/xacro.py '$(arg model)'
+    mav_name:=$(arg mav_name)
+    gimbal_camera_name:=$(arg gimbal_camera_name)
+    namespace:=$(arg namespace)
+    enable_logging:=false
+    enable_ground_truth:=true
+    enable_mavlink_interface:=false
+    log_file:=empty
+    "
+  />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+</launch>
