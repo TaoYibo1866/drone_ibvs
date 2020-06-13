@@ -147,6 +147,110 @@
     </xacro:camera_with_inertial_macro>
   </xacro:macro>
 
+  <xacro:macro name="tilt_camera_macro" params="namespace parent_link frame_rate
+      horizontal_fov image_width image_height image_format min_distance
+      max_distance noise_mean noise_stddev offset *origin">
+
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>${namespace}</robotNamespace>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        <legacyModeNS>true</legacyModeNS>
+      </plugin>
+    </gazebo>
+
+    <joint name="${namespace}/gimbal_base_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}"/>
+      <child link="${namespace}/gimbal_base_link"/>
+    </joint>
+
+    <link name="${namespace}/gimbal_base_link">
+      <xacro:box_inertial_with_origin
+        x="0.005"
+        y="0.02"
+        z="${offset + 0.01}"
+        mass="0.06">
+        <origin xyz="0.0 0.02 ${(offset + 0.01) / 2.0}" rpy="0 0 0"/>
+      </xacro:box_inertial_with_origin>
+      <visual>
+        <origin xyz="0.0 0.02 ${(offset + 0.01) / 2.0}" rpy="0 0 0" />
+        <geometry>
+          <box size="0.005 0.02 ${offset + 0.01}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+    </link>
+
+    <joint name="${namespace}/gimbal_pitch_joint" type="revolute">
+      <origin xyz="0.0 0.0 ${offset}" rpy="${pi} 0.0 0.0"/>
+      <parent link="${namespace}/gimbal_base_link"/>
+      <child link="${namespace}/gimbal_pitch_link"/>
+      <axis xyz="0.0 1.0 0.0"/>
+      <limit lower="${-pi/4}" upper="${pi/4}" effort="0.2" velocity="6.0"/>
+    </joint>
+
+    <link name="${namespace}/gimbal_pitch_link">
+      <xacro:box_inertial_with_origin
+        x="0.005"
+        y="0.03"
+        z="0.02"
+        mass="0.01">
+        <origin xyz="0.0 0.025 0.0" rpy="0 0 0" />
+      </xacro:box_inertial_with_origin>
+      <visual>
+        <origin xyz="0.0 0.025 0.0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.005 0.03 0.02"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+    </link>
+
+    <transmission name="${namespace}/pitch_tran">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${namespace}/gimbal_pitch_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${namespace}/gimbal_pitch_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <gazebo reference="${namespace}/gimbal_base_link">
+      <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="${namespace}/gimbal_pitch_link">
+      <material>Gazebo/Green</material>
+    </gazebo>
+    
+    <xacro:camera_with_inertial_macro
+      namespace="${namespace}"
+      parent_link="${namespace}/gimbal_pitch_link"
+      camera_suffix="0"
+      frame_rate="${frame_rate}"
+      horizontal_fov="${horizontal_fov}"
+      image_width="${image_width}"
+      image_height="${image_height}"
+      image_format="${image_format}"
+      min_distance="${min_distance}"
+      max_distance="${max_distance}"
+      noise_mean="${noise_mean}"
+      noise_stddev="${noise_stddev}"
+      enable_visual="true">
+      <cylinder radius="0.01" length="0.005"/>
+      <xacro:cylinder_inertial_with_origin
+        radius="0.01"
+        length="0.005"
+        mass="0.12">
+        <origin xyz="0 0 0" rpy="${-pi} 0 0" />
+      </xacro:cylinder_inertial_with_origin>
+      <origin xyz="0 0 0" rpy="${-pi} 0 0" />
+    </xacro:camera_with_inertial_macro>
+  </xacro:macro>
+
   <xacro:macro name="camera_with_inertial_macro"
     params="namespace parent_link camera_suffix frame_rate
       horizontal_fov image_width image_height image_format min_distance
