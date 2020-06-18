@@ -170,7 +170,7 @@
         x="0.005"
         y="0.02"
         z="${offset + 0.01}"
-        mass="0.06">
+        mass="0.0001">
         <origin xyz="0.0 0.02 ${(offset + 0.01) / 2.0}" rpy="0 0 0"/>
       </xacro:box_inertial_with_origin>
       <visual>
@@ -187,7 +187,7 @@
       <parent link="${namespace}/gimbal_base_link"/>
       <child link="${namespace}/gimbal_pitch_link"/>
       <axis xyz="0.0 1.0 0.0"/>
-      <limit lower="${-pi/4}" upper="${pi/4}" effort="0.2" velocity="6.0"/>
+      <limit lower="${-pi/3}" upper="${pi/3}" effort="0.2" velocity="6"/>
     </joint>
 
     <link name="${namespace}/gimbal_pitch_link">
@@ -195,7 +195,7 @@
         x="0.005"
         y="0.03"
         z="0.02"
-        mass="0.01">
+        mass="0.0001">
         <origin xyz="0.0 0.025 0.0" rpy="0 0 0" />
       </xacro:box_inertial_with_origin>
       <visual>
@@ -206,17 +206,6 @@
         <material name="green"/>
       </visual>
     </link>
-
-    <transmission name="${namespace}/pitch_tran">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${namespace}/gimbal_pitch_joint">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${namespace}/gimbal_pitch_motor">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
 
     <gazebo reference="${namespace}/gimbal_base_link">
       <material>Gazebo/Blue</material>
@@ -244,7 +233,7 @@
       <xacro:cylinder_inertial_with_origin
         radius="0.01"
         length="0.005"
-        mass="0.12">
+        mass="0.0001">
         <origin xyz="0 0 0" rpy="${-pi} 0 0" />
       </xacro:cylinder_inertial_with_origin>
       <origin xyz="0 0 0" rpy="${-pi} 0 0" />

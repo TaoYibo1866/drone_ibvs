@@ -1,14 +1,8 @@
 <launch>
   <arg name="mav_name" default="ardrone"/>
   <!-- ${namespace}/gimbal_camera_name in .gazebo file -->
-  <arg name="gimbal_camera_name" default="tilt_camera"/>
-  <arg name="world_name" default="square_gate"/>
-  <arg name="x" default="0.0"/>
-  <arg name="y" default="0.0"/>
-  <arg name="z" default="1.0"/>
-  <arg name="R" default="0.0"/>
-  <arg name="P" default="0.0"/>
-  <arg name="Y" default="1.6"/>
+  <arg name="gimbal_camera_name" default="pan_tilt_camera"/>
+  <arg name="world_name" default="logo_box"/>
   <arg name="enable_logging" default="false" />
   <arg name="enable_ground_truth" default="true" />
   <arg name="log_file" default="$(arg mav_name)" />
@@ -25,19 +19,15 @@
     <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
       <arg name="model" value="$(find drone_description)/urdf/mav_with_$(arg gimbal_camera_name).gazebo" />
-      <arg name="x" value="$(arg x)"/>
-      <arg name="y" value="$(arg y)"/>
-      <arg name="z" value="$(arg z)"/>
-      <arg name="R" value="$(arg R)"/>
-      <arg name="P" value="$(arg P)"/>
-      <arg name="Y" value="$(arg Y)"/>
+      <arg name="x" value="0.0"/>
+      <arg name="y" value="0.0"/>
+      <arg name="z" value="1.0"/>
+      <arg name="R" value="0.0"/>
+      <arg name="P" value="0.0"/>
+      <arg name="Y" value="0.0"/>
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg log_file)"/>
-    </include>
-    <include file="$(find drone_gazebo)/launch/$(arg gimbal_camera_name)_control.launch">
-      <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="gimbal_camera_name" value="$(arg gimbal_camera_name)" />
     </include>
 
     <node name="roll_pitch_yawrate_thrust_controller_node" pkg="rotors_control" type="roll_pitch_yawrate_thrust_controller_node" output="screen">
@@ -45,6 +35,7 @@
       <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
       <remap from="odometry" to="odometry_sensor1/odometry" />
     </node>
+    
     <node name="velocity_controller" pkg="drone_control" type="velocity_controller_node.py" args="NED" output="screen">
       <rosparam command="load" file="$(find drone_control)/config/velocity_controller_$(arg mav_name).yaml" />
     </node>
@@ -52,7 +43,16 @@
     <node name="position_controller" pkg="drone_control" type="position_controller_node.py" output="screen">
       <rosparam command="load" file="$(find drone_control)/config/position_controller_$(arg mav_name).yaml" />
     </node>
+
+    <include file="$(find drone_gazebo)/launch/$(arg gimbal_camera_name)_control.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+      <arg name="gimbal_camera_name" value="$(arg gimbal_camera_name)" />
+    </include>
+    
+    <node name="gimbal_controller" pkg="drone_control" type="gimbal_controller_node.py" args="$(arg gimbal_camera_name)" output="screen" />
+
     <node name="mission" pkg="drone_control" type="mission_node.py" output="screen"/>
+    <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera_0/image_raw"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>

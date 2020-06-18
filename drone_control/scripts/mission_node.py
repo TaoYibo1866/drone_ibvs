@@ -23,3 +23,6 @@ if __name__ == "__main__":
 
     pos_ac.send_goal(goal, feedback_cb=feedback_cb)
     pos_ac.wait_for_result()
+    result = pos_ac.get_result()
+    if result.errno == 0:
+        rospy.loginfo("success")

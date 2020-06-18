@@ -37,7 +37,7 @@
     max_distance="100"
     noise_mean="0.0"
     noise_stddev="0.007"
-    offset="0.05">
-    <origin xyz="0.1 0.0 0.0" rpy="0 0 0"/>
+    offset="0.0001">
+    <origin xyz="0.05 0.0 0.0" rpy="0 0 0"/>
   </xacro:tilt_camera_macro>
 </robot>
