@@ -21,7 +21,7 @@
 
 <robot name="$(arg mav_name)" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find drone_description)/urdf/mav_with_$(arg gimbal_camera_name).gazebo" />
+  <xacro:include filename="$(find drone_description)/urdf/$(arg model).gazebo" />
 
   <link name="world"/>
 

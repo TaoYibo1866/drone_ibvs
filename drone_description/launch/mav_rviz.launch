@@ -4,16 +4,15 @@
   <arg name="rvizconfig" default="$(find drone_description)/rviz/urdf.rviz" />
 
   <arg name="mav_name" default="ardrone"/>
-  <arg name="gimbal_camera_name" default="tilt_camera"/>
   <arg name="namespace" default="$(arg mav_name)"/>
-  <arg name="model" default="$(find drone_description)/urdf/fixed_mav_with_gimbal_camera.gazebo"/>
+  <arg name="model" default="mav_generic_odometry_sensor"/>
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="
-    $(find xacro)/xacro.py '$(arg model)'
+    $(find xacro)/xacro.py '$(find drone_description)/urdf/fixed_mav.gazebo'
     mav_name:=$(arg mav_name)
-    gimbal_camera_name:=$(arg gimbal_camera_name)
     namespace:=$(arg namespace)
+    model:=$(arg model)
     enable_logging:=false
     enable_ground_truth:=true
     enable_mavlink_interface:=false

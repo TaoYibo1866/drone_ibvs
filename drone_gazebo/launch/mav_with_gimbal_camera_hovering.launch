@@ -44,15 +44,16 @@
       <rosparam command="load" file="$(find drone_control)/config/position_controller_$(arg mav_name).yaml" />
     </node>
 
-    <include file="$(find drone_gazebo)/launch/$(arg gimbal_camera_name)_control.launch">
+    <node name="gimbal_controller" pkg="drone_control" type="gimbal_controller_node.py" args="$(arg gimbal_camera_name)" output="screen" />
+
+    <include file="$(find drone_control)/launch/$(arg gimbal_camera_name)_control.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
       <arg name="gimbal_camera_name" value="$(arg gimbal_camera_name)" />
     </include>
-    
-    <node name="gimbal_controller" pkg="drone_control" type="gimbal_controller_node.py" args="$(arg gimbal_camera_name)" output="screen" />
 
     <node name="mission" pkg="drone_control" type="mission_node.py" output="screen"/>
     <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera_0/image_raw"/>
+    
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>

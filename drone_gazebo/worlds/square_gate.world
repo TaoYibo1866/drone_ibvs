@@ -11,8 +11,8 @@
     <include>
       <uri>model://square_gate</uri>
       <name>square_gate</name>
-      <static>true</static>
-      <pose>-2 15 0 0 0 0</pose>
+      <static>false</static>
+      <pose>0 15 0 0 0 0</pose>
     </include>
     <model name='race_field'>
       <static>true</static>
@@ -25,14 +25,14 @@
             </plane>
           </geometry>
         </collision>
-        <collision name='ceiling'>
+        <!-- <collision name='ceiling'>
           <pose>0 0 6 0 3.1415926 0</pose>
           <geometry>
             <box>
               <size>10 40 0.001</size>
             </box>
           </geometry>
-        </collision>
+        </collision> -->
         <collision name='wall0'>
           <pose>-5 0 3 0 1.5707963 0</pose>
           <geometry>
