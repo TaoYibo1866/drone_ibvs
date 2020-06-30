@@ -63,6 +63,7 @@ class PositionController:
         feedback.postion_err.y = ey
         feedback.postion_err.z = ez
         self.pos_as.publish_feedback(feedback)
+        # TODO set succeeded based on criteria in goal
         if norm(np.float32([ex, ey, ez])) < 0.05:
             self.pos_as.set_succeeded(GoToPointResult(errno=0))
         return

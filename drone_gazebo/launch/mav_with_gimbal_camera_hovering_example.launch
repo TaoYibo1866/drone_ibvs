@@ -1,5 +1,5 @@
 <launch>
-  <arg name="mav_name" default="firefly"/>
+  <arg name="mav_name" default="ardrone"/>
   <!-- ${namespace}/gimbal_camera_name in .gazebo file -->
   <arg name="gimbal_camera_name" default="pan_tilt_camera"/>
   <arg name="world_name" default="logo_box"/>
@@ -19,9 +19,9 @@
     <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
       <arg name="model" value="$(find drone_description)/urdf/mav_with_$(arg gimbal_camera_name).gazebo" />
-      <arg name="x" value="0.0"/>
+      <arg name="x" value="2.0"/>
       <arg name="y" value="0.0"/>
-      <arg name="z" value="5.0"/>
+      <arg name="z" value="0.0"/>
       <arg name="R" value="0.0"/>
       <arg name="P" value="0.0"/>
       <arg name="Y" value="0.0"/>
@@ -35,23 +35,26 @@
       <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
       <remap from="odometry" to="odometry_sensor1/odometry" />
     </node>
-
-    <node name="velocity_controller" pkg="drone_control" type="velocity_controller_node.py" args="FRD" output="screen">
+    
+    <node name="velocity_controller" pkg="drone_control" type="velocity_controller_node.py" args="NED" output="screen">
       <rosparam command="load" file="$(find drone_control)/config/velocity_controller_$(arg mav_name).yaml" />
     </node>
 
+    <node name="position_controller" pkg="drone_control" type="position_controller_node.py" output="screen">
+      <rosparam command="load" file="$(find drone_control)/config/position_controller_$(arg mav_name).yaml" />
+    </node>
+
     <node name="gimbal_controller" pkg="drone_control" type="gimbal_controller_node.py" args="$(arg gimbal_camera_name)" output="screen" />
-    
+
     <include file="$(find drone_control)/launch/$(arg gimbal_camera_name)_control.launch">
       <arg name="mav_name" value="$(arg mav_name)" />
       <arg name="gimbal_camera_name" value="$(arg gimbal_camera_name)" />
     </include>
 
+    <node name="hovering_mission" pkg="drone_control" type="hovering_mission_node.py" output="screen"/>
     <node name="camera_output" pkg="image_view" type="image_view" args="image:=/$(arg mav_name)/$(arg gimbal_camera_name)/camera_0/image_raw"/>
-    <node name="joy_node" pkg="joy" type="joy_node"/>
-    <node name="joy_control" pkg="drone_joy_interface" type="joy_control_node.py" output="screen"/>
+    
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>
-
 </launch>

@@ -1,0 +1,13 @@
+w: 1280.0
+h: 800.0
+f: 700.0
+cameraMatrix:
+  rows: 3
+  cols: 3
+  data: [700, 0,   640,
+         0,   700, 400,
+         0,   0,     1]
+distCoeffs:
+  rows: 1
+  cols: 4
+  data: [0, 0, 0, 0]

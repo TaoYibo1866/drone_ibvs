@@ -23,12 +23,11 @@
   <!-- Instantiate the mav with a generic odometry sensor. -->
   <xacro:include filename="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
 
-  <!-- pan-tilt camera -->
-  <xacro:include filename="$(find drone_description)/urdf/gimbal_camera.xacro" />
-  <xacro:tilt_camera_macro
-    namespace="${namespace}/tilt_camera"
+  <xacro:camera_macro
+    namespace="${namespace}/front_camera"
     parent_link="${namespace}/base_link"
-    frame_rate="30"
+    camera_suffix="0"
+    frame_rate="30.0"
     horizontal_fov="1.48"
     image_width="1280"
     image_height="800"
@@ -37,7 +36,9 @@
     max_distance="100"
     noise_mean="0.0"
     noise_stddev="0.007"
-    offset="0.0001">
-    <origin xyz="0.05 0.0 0.0" rpy="0 0 0"/>
-  </xacro:tilt_camera_macro>
+    enable_visual="true">
+    <box size="0.02 0.05 0.05" />
+    <origin xyz="0.05 0 0" rpy="0 0 0" />
+  </xacro:camera_macro>
+
 </robot>

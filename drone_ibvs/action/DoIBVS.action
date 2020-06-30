@@ -1,0 +1,9 @@
+# Define the goal
+geometry_msgs/Pose desired_pose
+---
+# Define the result
+uint32 errno
+---
+# Define a feedback message
+float32 pixel_err
+uint32 nfeatures

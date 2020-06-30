@@ -16,6 +16,7 @@ if __name__ == "__main__":
     pos_ac = actionlib.SimpleActionClient("position_controller/go_to_point", GoToPointAction)
     pos_ac.wait_for_server(rospy.Duration(secs=3))
     rospy.sleep(2)
+    # TODO add success criteria to goal
     goal = GoToPointGoal()
     goal.desired_position.x = 0
     goal.desired_position.y = 0
