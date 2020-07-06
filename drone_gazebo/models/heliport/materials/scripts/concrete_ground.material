@@ -1,13 +1,13 @@
-material ibvs/logo
+material concrete_ground
 {
-  receive_shadows off
+  receive_shadows on
   technique
   {
     pass
     {
       texture_unit
       {
-        texture logo.jpg
+        texture concrete_ground.jpg
         filtering anistropic
         max_anisotropy 16
       }

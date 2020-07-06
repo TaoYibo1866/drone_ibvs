@@ -18,7 +18,7 @@
       <uri>model://logo_box</uri>
       <name>logo_box</name>
       <static>false</static>
-      <pose>0 0 0.125 0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
     </include>
     <model name='ground_plane'>
       <static>true</static>

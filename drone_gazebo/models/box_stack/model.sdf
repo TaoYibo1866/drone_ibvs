@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='box_stack'>
+    <self_collide>true</self_collide>
+    <include>
+      <uri>model://chassis</uri>
+      <name>chassis0</name>
+      <static>true</static>
+      <pose>0 1.2 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://chassis</uri>
+      <name>chassis1</name>
+      <static>true</static>
+      <pose>0 -1.2 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://box_level</uri>
+      <name>box_level0</name>
+      <static>false</static>
+      <pose>0 0 0.5 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://box_level</uri>
+      <name>box_level1</name>
+      <static>false</static>
+      <pose>0 0 0.75 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://box_level</uri>
+      <name>box_level2</name>
+      <static>false</static>
+      <pose>0 0 1 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://box_level</uri>
+      <name>box_level3</name>
+      <static>false</static>
+      <pose>0 0 1.25 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://box_level</uri>
+      <name>box_level4</name>
+      <static>false</static>
+      <pose>0 0 1.5 0 0 0</pose>
+    </include>
+  </model>
+</sdf>

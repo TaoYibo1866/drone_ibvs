@@ -1,0 +1,78 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='box_level'>
+    <static>false</static>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box0</name>
+      <static>false</static>
+      <pose>1.9 2.15 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box1</name>
+      <static>false</static>
+      <pose>0 2.15 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box2</name>
+      <static>false</static>
+      <pose>-1.9 2.15 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box3</name>
+      <static>false</static>
+      <pose>1.9 0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box4</name>
+      <static>false</static>
+      <pose>0 0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box5</name>
+      <static>false</static>
+      <pose>-1.9 0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box6</name>
+      <static>false</static>
+      <pose>1.9 -0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box7</name>
+      <static>false</static>
+      <pose>0 -0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box8</name>
+      <static>false</static>
+      <pose>-1.9 -0.72 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box9</name>
+      <static>false</static>
+      <pose>1.9 -2.15 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box10</name>
+      <static>false</static>
+      <pose>0 -2.15 0 0 0 3.1415926</pose>
+    </include>
+    <include>
+      <uri>model://logo_box</uri>
+      <name>box11</name>
+      <static>false</static>
+      <pose>-1.9 -2.15 0 0 0 3.1415926</pose>
+    </include>
+  </model>
+</sdf>
