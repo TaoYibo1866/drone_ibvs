@@ -1,0 +1,53 @@
+<launch>
+  <!-- only firefly and ardrone is tuned -->
+  <arg name="mav_name" default="ardrone"/>
+  <arg name="world_name" default="logo_box"/>
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="1"/>
+  <arg name="R" default="0"/>
+  <arg name="P" default="0"/>
+  <arg name="Y" default="0"/>
+  <arg name="enable_logging" default="false" />
+  <arg name="enable_ground_truth" default="true" />
+  <arg name="log_file" default="$(arg mav_name)" />
+  <arg name="paused" default="true"/>
+  <arg name="gui" default="true"/>
+  
+  <include file="$(find drone_gazebo)/launch/world.launch">
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <group ns="$(arg mav_name)">
+    <include file="$(find drone_gazebo)/launch/spawn_mav.launch">
+      <arg name="mav_name" value="$(arg mav_name)" />
+      <arg name="model" value="$(find drone_description)/urdf/mav_vaccum_gripper.gazebo" />
+      <arg name="x" value="$(arg x)"/>
+      <arg name="y" value="$(arg y)"/>
+      <arg name="z" value="$(arg z)"/>
+      <arg name="R" value="$(arg R)"/>
+      <arg name="P" value="$(arg P)"/>
+      <arg name="Y" value="$(arg Y)"/>
+      <arg name="enable_logging" value="$(arg enable_logging)" />
+      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+      <arg name="log_file" value="$(arg log_file)"/>
+    </include>
+
+    <node name="roll_pitch_yawrate_thrust_controller_node" pkg="rotors_control" type="roll_pitch_yawrate_thrust_controller_node" output="screen">
+      <rosparam command="load" file="$(find rotors_gazebo)/resource/roll_pitch_yawrate_thrust_controller_$(arg mav_name).yaml" />
+      <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
+      <remap from="odometry" to="odometry_sensor1/odometry" />
+    </node>
+    <node name="velocity_controller" pkg="drone_control" type="velocity_controller_node.py" args="FRD" output="screen">
+      <rosparam command="load" file="$(find drone_control)/config/velocity_controller_$(arg mav_name).yaml" />
+    </node>
+
+    <node name="joy_node" pkg="joy" type="joy_node"/>
+    <node name="joy_control" pkg="drone_joy_interface" type="joy_control_node.py" output="screen"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  </group>
+</launch>

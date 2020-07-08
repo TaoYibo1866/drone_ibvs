@@ -20,6 +20,7 @@
       <static>false</static>
       <pose>0 0 0 0 0 0</pose>
     </include>
+
     <model name='ground_plane'>
       <static>true</static>
       <link name='link'>

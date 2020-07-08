@@ -14,17 +14,3 @@ material ibvs/marker
     }
   }
 }
-
-material ibvs/box
-{
-  receive_shadows off
-  technique
-  {
-    pass ambient
-    {
-      ambient 0 0 1
-      diffuse 0 0 1
-      specular 0.1 0.1 0.1 1 1
-    }
-  }
-}

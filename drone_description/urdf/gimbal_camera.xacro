@@ -52,15 +52,17 @@
       </visual>
     </link>
 
-    <joint name="${namespace}/gimbal_pitch_joint" type="revolute">
-      <origin xyz="0.0 -0.05 -${offset}" rpy="${pi} 0.0 0.0"/>
-      <parent link="${namespace}/gimbal_base_link"/>
-      <child link="${namespace}/gimbal_pitch_link"/>
+    <xacro:revolute_gimbal_joint_macro
+      namespace="${namespace}"
+      joint_suffix="0"
+      parent_link="${namespace}/gimbal_base_link"
+      child_link="${namespace}/gimbal_tilt_link">
       <axis xyz="0.0 1.0 0.0"/>
       <limit lower="${-pi/4}" upper="${pi/4}" effort="0.2" velocity="6.0"/>
-    </joint>
+      <origin xyz="0.0 -0.05 -${offset}" rpy="${pi} 0.0 0.0"/>
+    </xacro:revolute_gimbal_joint_macro>
 
-    <link name="${namespace}/gimbal_pitch_link">
+    <link name="${namespace}/gimbal_tilt_link">
       <xacro:box_inertial_with_origin
         x="0.02"
         y="0.04"
@@ -91,15 +93,17 @@
       </visual>
     </link>
 
-    <joint name="${namespace}/gimbal_roll_joint" type="revolute">
-      <origin xyz="-0.05 -0.05 0.0" rpy="0.0 0.0 0.0"/>
-      <parent link="${namespace}/gimbal_pitch_link"/>
-      <child link="${namespace}/gimbal_roll_link"/>
+    <xacro:revolute_gimbal_joint_macro
+      namespace="${namespace}"
+      joint_suffix="1"
+      parent_link="${namespace}/gimbal_tilt_link"
+      child_link="${namespace}/gimbal_pan_link">
       <axis xyz="1.0 0.0 0.0"/>
       <limit lower="${-pi/4}" upper="${pi/4}" effort="1.2" velocity="6.0"/>
-    </joint>
+      <origin xyz="-0.05 -0.05 0.0" rpy="0.0 0.0 0.0"/>
+    </xacro:revolute_gimbal_joint_macro>
 
-    <link name="${namespace}/gimbal_roll_link">
+    <link name="${namespace}/gimbal_pan_link">
       <xacro:box_inertial_with_origin
         x="0.03"
         y="0.02"
@@ -116,43 +120,21 @@
       </visual>
     </link>
 
-    <transmission name="${namespace}/pitch_tran">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${namespace}/gimbal_pitch_joint">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${namespace}/gimbal_pitch_motor">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <transmission name="${namespace}/roll_tran">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${namespace}/gimbal_roll_joint">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${namespace}/gimbal_roll_motor">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
     <gazebo reference="${namespace}/gimbal_base_link">
       <material>Gazebo/Blue</material>
     </gazebo>
 
-    <gazebo reference="${namespace}/gimbal_pitch_link">
+    <gazebo reference="${namespace}/gimbal_tilt_link">
       <material>Gazebo/Green</material>
     </gazebo>
 
-    <gazebo reference="${namespace}/gimbal_roll_link">
+    <gazebo reference="${namespace}/gimbal_pan_link">
       <material>Gazebo/Red</material>
     </gazebo>
     
     <xacro:camera_with_inertial_macro
       namespace="${namespace}"
-      parent_link="${namespace}/gimbal_roll_link"
+      parent_link="${namespace}/gimbal_pan_link"
       camera_suffix="0"
       frame_rate="${frame_rate}"
       horizontal_fov="${horizontal_fov}"
@@ -173,6 +155,27 @@
       </xacro:cylinder_inertial_with_origin>
       <origin xyz="0.05 0 0" rpy="${pi/2} ${-pi/2} 0" />
     </xacro:camera_with_inertial_macro>
+  </xacro:macro>
+
+  <xacro:macro name="revolute_gimbal_joint_macro"
+    params="namespace joint_suffix parent_link child_link *axis *limit *origin">
+    <joint name="${namespace}/gimbal_joint_${joint_suffix}" type="revolute">
+      <parent link="${parent_link}"/>
+      <child link="${child_link}"/>
+      <xacro:insert_block name="axis" />
+      <xacro:insert_block name="limit" />
+      <xacro:insert_block name="origin" />
+    </joint>
+    <transmission name="${namespace}/gimbal_joint_trans_${joint_suffix}">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${namespace}/gimbal_joint_${joint_suffix}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${namespace}/gimbal_joint_motor_${joint_suffix}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
   </xacro:macro>
 
   <xacro:macro name="camera_with_inertial_macro"
