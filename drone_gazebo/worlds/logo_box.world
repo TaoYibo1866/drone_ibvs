@@ -8,12 +8,6 @@
     <include>
       <uri>model://sun</uri>
     </include>
-    <!-- <include>
-      <uri>model://marker_box</uri>
-      <name>marker_box</name>
-      <static>false</static>
-      <pose>0 0 0.125 0 0 0</pose>
-    </include> -->
     <include>
       <uri>model://logo_box</uri>
       <name>logo_box</name>
