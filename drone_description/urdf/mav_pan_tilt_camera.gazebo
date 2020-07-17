@@ -24,7 +24,7 @@
   <xacro:include filename="$(find drone_description)/urdf/mav_generic_odometry_sensor.gazebo" />
 
   <!-- pan-tilt camera -->
-  <xacro:include filename="$(find drone_description)/urdf/gimbal_camera.xacro" />
+  <xacro:include filename="$(find drone_description)/urdf/pan_tilt_camera.xacro" />
   <xacro:pan_tilt_camera_macro
     namespace="${namespace}/pan_tilt_camera"
     parent_link="${namespace}/base_link"

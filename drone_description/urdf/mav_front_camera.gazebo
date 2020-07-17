@@ -22,7 +22,7 @@
 <robot name="$(arg mav_name)" xmlns:xacro="http://ros.org/wiki/xacro">
   <!-- Instantiate the mav with a generic odometry sensor. -->
   <xacro:include filename="$(find drone_description)/urdf/mav_generic_odometry_sensor.gazebo" />
-  <xacro:include filename="$(find drone_description)/urdf/gimbal_camera.xacro" />
+  <xacro:include filename="$(find drone_description)/urdf/pan_tilt_camera.xacro" />
 
   <xacro:camera_with_distortion_macro
       namespace="${namespace}/front_camera"

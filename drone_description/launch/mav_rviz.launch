@@ -3,7 +3,7 @@
   <arg name="mav_name" default="ardrone"/>
   <arg name="namespace" default="$(arg mav_name)"/>
   <arg name="gui" default="true" />
-  <arg name="model" default="$(find drone_description)/urdf/mav_gimbal_camera.gazebo"/>
+  <arg name="model" default="$(find drone_description)/urdf/mav_pan_tilt_camera.gazebo"/>
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="
